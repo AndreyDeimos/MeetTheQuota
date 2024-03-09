@@ -141,7 +141,7 @@ def table_render():
     for i in range(table_size):
         for j in range(table_size):
             if (i, j) not in player_was:
-                render_number(table[i][j], pos * (i + 0.5),
+                render_number(table[j][i], pos * (i + 0.5),
                               pos * (j + 0.5), pos - 1)
     pygame.draw.rect(table_surface, "red", [pos * player_x , pos * player_y, pos, pos], width=0)
 
