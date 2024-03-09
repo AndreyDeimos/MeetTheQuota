@@ -133,16 +133,17 @@ def table_lines():
     for i in range(table_size):
         pygame.draw.line(table_lines_surface, "red", (pos * i, 0), (pos * i, 999), width=1)
 
-def table_render():
-    global table_size, table, table_surface, table_lines_surface
-    table_surface.fill("black")
-    table_surface.blit(table_lines_surface, (0, 0))
+def table_numbers():
     pos = 1000 // table_size
     for i in range(table_size):
         for j in range(table_size):
             if (i, j) not in player_was:
-                render_number(table[j][i], pos * (i + 0.5),
-                              pos * (j + 0.5), pos - 1)
+                render_number(table[j][i], pos * (i + 0.5), pos * (j + 0.5), pos - 1)
+def table_render():
+    global table_size, table, table_surface, table_lines_surface
+    pos = 1000 // table_size
+    table_surface.fill("black")
+    table_surface.blit(table_lines_surface, (0, 0))
     pygame.draw.rect(table_surface, "red", [pos * player_x , pos * player_y, pos, pos], width=0)
 
 
@@ -242,14 +243,16 @@ def new_table():
     scorecounter = 0
 
 def update_scene():
-    global player_x, player_y, table_size, gamestate, quotascore, sumscore, table, table_size, spread
+    global player_x, player_y, table_size, gamestate, quotascore, sumscore, table, table_size, spread, scorecounter
     if player_x == table_size - 1 and player_y == 0:
         if look_how_bad_are_you == 0:
             ...
+        # adding the last value player stepped on since no after adding is called due no inputs (look game gamestate handling)
+        scorecounter += table[0][table_size - 1]
         cheapest_path = find_cheapest_path(table)
         sumscore += int(100 * (cheapest_path / scorecounter))
         print(cheapest_path, scorecounter)
-        quotascore += 50    
+        quotascore += 50 * ((spread + table_size - 3) / 20 + 1)
         if quotascore > sumscore:
             gamestate = 'start_menu'
             sumscore = 0
