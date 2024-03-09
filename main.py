@@ -22,7 +22,7 @@ screen = pygame.display.set_mode(size, pygame.FULLSCREEN, pygame.HWSURFACE)
 pygame.display.set_caption("Meet the quota")
 running = True
 
-table_size = 2
+table_size = 3
 spread = 2
 table = generate_random_table(table_size, spread)
 table[0][table_size - 1] = 0
@@ -248,8 +248,8 @@ def update_scene():
         if look_how_bad_are_you == 0:
             ...
         cheapest_path = find_cheapest_path(table)
-        sumscore += int(100 * (cheapest_path[0] / scorecounter))
-        print(cheapest_path[0], scorecounter)
+        sumscore += int(100 * (cheapest_path / scorecounter))
+        print(cheapest_path, scorecounter)
         quotascore += 50    
         if quotascore > sumscore:
             gamestate = 'start_menu'
