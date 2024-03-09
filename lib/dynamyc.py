@@ -32,6 +32,6 @@ def generate_random_table(size, spread):
         
         # Append the row to the table
         table.append(row)
-
+    table[size - 1][0] = 0
     return table
 

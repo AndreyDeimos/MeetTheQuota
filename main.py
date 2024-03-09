@@ -25,7 +25,6 @@ running = True
 table_size = 3
 spread = 2
 table = generate_random_table(table_size, spread)
-table[0][table_size - 1] = 0
 table_surface = pygame.Surface((1000, 1000), pygame.HWSURFACE)
 player_was = []
 player_x = 0
