@@ -41,6 +41,7 @@ player_was = []
 player_x = 0
 player_y = table_size - 1
 sumscore = 0
+level = 1
 
 # handlers for input once per frame
 pressed_right = 0
@@ -176,10 +177,8 @@ def render_number(number, x, y, size):
     text.render_text(table_lines_surface)
 
 score = Text()
-level = Text()
 quota = Text()
 score.set_cords(1450, 1080 // 4)
-level.set_cords(1450, (1080 // 4) * 2)
 quota.set_cords(1450, (1080 // 4) * 3)
 scorecounter = 0
 quotascore = 0
@@ -216,7 +215,8 @@ def render_timer():
 end_text = Text()
 end_text.set_font("dubai", 72)
 def render_end_screen():
-    end_text.set_text(f"Your level was: {spread + table_size - 4}", "red")
+    global level
+    end_text.set_text(f"Your level was: {level}", "red")
     end_text.set_cords(960, 540)
     end_text.render_text(screen)
     continue_text.render_text(screen)
@@ -266,20 +266,19 @@ def handle_event(event):
                     player_was.append((player_x, player_y))
                     player_x += 1
                     scorecounter += table[player_x][player_y]
-                    print("pressed right")
             if event.key == pygame.K_UP:
                 if player_y != 0 and not pressed_up:
                     pressed_up = 1
                     player_was.append((player_x, player_y))
                     player_y -= 1
                     scorecounter += table[player_x][player_y]
-                    print("pressed up")
     if gamestate == "endscreen":
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RETURN and not return_pressed:
                 gamestate = "start_menu"
+                level = 1
 def new_table():
-    global player_x, player_y, player_was, table, table_size, spread, scorecounter
+    global player_x, player_y, player_was, table, table_size, spread, scorecounter, level
     harder = choice((1, 2))
     if harder == 1:
         table_size += 1
@@ -291,15 +290,13 @@ def new_table():
     player_y = table_size - 1
     player_was = []
     scorecounter = 0
-
 def update_scene():
-    global player_x, player_y, table_size, gamestate, quotascore, sumscore, table, table_size, spread, scorecounter, timer_start, remaining_time
+    global player_x, player_y, table_size, gamestate, quotascore, sumscore, table, table_size, spread, scorecounter, timer_start, remaining_time, level
     if player_x == table_size - 1 and player_y == 0:
         # adding the last value player stepped on since no after adding is called due no inputs (look game gamestate handling)
         scorecounter += table[0][table_size - 1]
         cheapest_path = find_cheapest_path(table)
         sumscore += int(100 * (cheapest_path / scorecounter))
-        print(cheapest_path, scorecounter)
         quotascore += 50 + int((spread + table_size - 3) / 10) * 25
         if quotascore > sumscore:
             gamestate = 'endscreen'
@@ -308,13 +305,15 @@ def update_scene():
             table_size = 2
             spread = 2
         new_table()
+        if gamestate == "game":
+            level += 1
         timer_start = pygame.time.get_ticks()
         remaining_time = 15000
     elif remaining_time == 0:
         gamestate = 'endscreen'
         sumscore = 0
         quotascore = 0
-        table_size = 2
+        table_size = 3
         spread = 2
         new_table()
         remaining_time = 15000
