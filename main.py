@@ -112,9 +112,12 @@ game_tutorial_state = 1
 
 # rendering the slides of pregame tutorial
 def render_game_tutorial():
-    global game_tutorial_state, gamestate
+    global game_tutorial_state, gamestate, timer_duration, remaining_time, timer_start
     if game_tutorial_state == 4:
         gamestate = "game"
+        timer_duration = 15000  
+        remaining_time = 15000 
+        timer_start = pygame.time.get_ticks()
     else:
         img = pygame.image.load(f"static/slide{game_tutorial_state}.png")
         screen.blit(img, (0,0))
@@ -188,7 +191,7 @@ timer_font = pygame.font.SysFont("dubai", 72)
 timer_color = "red"
 timer_x, timer_y = 1450, (1080 // 4) * 2
 timer_start = pygame.time.get_ticks()
-timer_duration = 15000  # 30 seconds
+timer_duration = 15000  
 remaining_time = 15000
 
 def render_game():
