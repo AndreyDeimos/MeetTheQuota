@@ -181,8 +181,11 @@ def render_number(number, x, y, size):
 
 score = Text()
 quota = Text()
+x_exit = Text()
+x_exit.set_text("press x to end the game", "red")
 score.set_cords(1450, 1080 // 4)
 quota.set_cords(1450, (1080 // 4) * 3)
+x_exit.set_cords(1500, 1080 - 36)
 scorecounter = 0
 quotascore = 0
 
@@ -201,6 +204,7 @@ def render_game():
     score.render_text(screen)
     quota.set_text(f"{sumscore} / {quotascore}", "red")
     quota.render_text(screen)
+    x_exit.render_text(screen)
     screen.blit(table_surface, (40, 40))
 
 def render_timer(): 
@@ -238,7 +242,7 @@ def render_start_menu():
     render_exit_button()
 
 def handle_event(event):
-    global gamestate, button_state, running, game_tutorial_state, return_pressed, player_y, player_x, player_was, pressed_right, pressed_up, scorecounter
+    global gamestate, button_state, running, game_tutorial_state, return_pressed, player_y, player_x, player_was, pressed_right, pressed_up, scorecounter, running
     if gamestate == "tutorial":
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RETURN and not return_pressed:
@@ -275,6 +279,8 @@ def handle_event(event):
                     player_was.append((player_x, player_y))
                     player_y -= 1
                     scorecounter += table[player_x][player_y]
+            if event.key == pygame.K_x:
+                gamestate = "endscreen"
     if gamestate == "endscreen":
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RETURN and not return_pressed:
